@@ -25,3 +25,14 @@ export const purchaseCourse = () => {
     url: '/front/course/getPurchaseCourse'
   })
 }
+
+// 获取课程详情接口
+export const getCourseById = courseId => {
+  return request({
+    method: 'GET',
+    url: '/front/course/getCourseById',
+    params: {
+      courseId
+    }
+  })
+}

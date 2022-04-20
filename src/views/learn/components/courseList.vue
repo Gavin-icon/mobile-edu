@@ -23,6 +23,7 @@
                 finished-text="没有更多了"
                 @load="onLoad">
         <van-cell v-for="item in list"
+                  @click="$router.push({ name: 'course-info', params: { courseId: item.id } })"
                   :key="item.id">
           <!--所有课程与已购课程的图不一样：课程左侧图片-->
           <div><img :src="item.image" alt=""></div>

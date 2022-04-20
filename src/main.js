@@ -7,6 +7,9 @@ import 'amfe-flexible'
 // 引入vant
 import Vant from 'vant'
 import 'vant/lib/index.css'
+// import Vconosle from 'vconsole'
+// // eslint-disable-next-line
+// let Vconsole = new Vconosle()
 // 注册vant为Vue插件
 Vue.use(Vant)
 Vue.config.productionTip = false

@@ -40,4 +40,37 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 5.注意在进行本地状态存储或者会话级存储时，服务端返回的string,所以可以直接存储在localStorage/sessionStorage中，但是Vuex的state中我们读取数据时应该使用JSON.parse()转换为对象格式方便查看!
 
 6. 给user读取本地存储时如果读取不到结果，要用 null 而不是 {} ,这很重要
+
+7.Vue项目中后台传递的富文本格式的代码需要单独设置其css样式，且不能scoped才能生效！
+
+8.阿里云点播服务配置项：
+(1)静态资源引入css、js:
+<link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.9.19/skins/default/aliplayer-min.css" />
+<script src="https://g.alicdn.com/de/prismplayer/2.9.19/aliplayer-h5-min.js"></script>
+(2)接口请求成功后实例化阿里云视频对象H5:
+    var player = new window.Aliplayer({
+      // 挂载的元素
+      id: 'video-container',
+      width: '100%',
+      height: '100%',
+      vid: data.content.fileId, //  必选参数。音视频ID。示例：1e067a2831b641db90d570b6480f****。
+      playauth: data.content.playAuth, //  必选参数。音视频播放凭证。
+      format: 'mp4' // 必须配置format
+      // qualitySort: 'asc',
+      // mediaType: 'video',
+      // autoplay: true,
+      // isLive: false,
+      // playsinline: true,
+      // preload: true,
+      // rePlay: false,
+      // controlsBraVisibility: 'hover',
+      // useH5Prism: true
+    }, function (player) {
+      console.log('The player is created.')
+    })
+
+9. 正则表达式的分组处理：this.$store.state.user.organization.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
+一般来说，对vue组件内部的数据处理时，使用filters/computed
+
+10.scoped组件内部深层选择器：  >>>   ::v-deep  /deep/
 ```

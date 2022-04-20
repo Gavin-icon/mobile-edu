@@ -26,6 +26,28 @@ const routes = [
       requiresAuth: true
     }
   },
+  // 课程目录页面
+  {
+    path: '/course-info/:courseId',
+    name: 'course-info',
+    component: () => import(/* webpackChunkName: course-info */'@/views/course-info'),
+    props: true
+  },
+  // 视频页面
+  {
+    path: '/lesson-video/:lessonId',
+    name: 'lesson-video',
+    component: () => import(/* webpackChunkName: lesson-video */'@/views/course-info/video'),
+    props: true
+  },
+  // 支付页面
+  {
+    path: '/pay/:courseId',
+    name: 'pay',
+    component: () => import(/* webpackChunkName: pay */'@/views/pay'),
+    meta: { requiresAuth: true },
+    props: true
+  },
   // 用户页面
   {
     path: '/user',
