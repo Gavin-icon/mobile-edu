@@ -10,13 +10,13 @@
         :key="ad.id"><img :src="ad.img"></van-swipe-item>
     </van-swipe>
     <!-- 课程列表 -->
-    <course-list></course-list>
+    <course-list :fetchData="fetchData"></course-list>
   </div>
 </template>
 
 <script>
 import CourseList from './courseList'
-import { getAds } from '@/services/course'
+import { getAds, getQueryCourse } from '@/services/course'
 export default {
   name: 'CourseContent',
   data () {
@@ -30,6 +30,7 @@ export default {
   },
   created () {
     this.loadAds()
+    // this.fetchData = getQueryCourse 也可以
   },
   computed: {
     // 对上架的进行筛选，在计算属性中可以缓存，利用filter
@@ -38,6 +39,10 @@ export default {
     }
   },
   methods: {
+    // 通过函数传递接口
+    fetchData (options) {
+      return getQueryCourse(options)
+    },
     async loadAds () {
       const { data } = await getAds({
         spaceKeys: '999'

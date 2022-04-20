@@ -34,4 +34,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 -->  解决办法： 每次刷新后由count记录刷新次数，count++，判断是否经过了刷新[count!==0就经过了刷新]，刷新了就让列表list为空，但是我们不应该每次触底都让list为空，否则就拿不到之前push进去的数据了，所以我们应该在第一次触底后把count归0，解决掉refresh状态，这样的话，既解决了报错又解决了重复数据问题!!!!
 
 3.对于course-list组件，由于会被学习页面复用，其中后台返回的数据信息接口可能不一致，所以我们在给list赋值时要谨慎：如-->在选课course界面的list赋值时，需要经过以下判断：if(data.data&&data.data.records&&data.data.records.length!==0) { 满足条件才可以赋值--> this.list = data.data.records }
+
+4.对象转urlencoded形式的方法：(1)手动拼接(2)qs.stringify(obj) (3)浏览器移动端特有：new URLSearchParams(obj).toString()
+
+5.注意在进行本地状态存储或者会话级存储时，服务端返回的string,所以可以直接存储在localStorage/sessionStorage中，但是Vuex的state中我们读取数据时应该使用JSON.parse()转换为对象格式方便查看!
+
+6. 给user读取本地存储时如果读取不到结果，要用 null 而不是 {} ,这很重要
 ```

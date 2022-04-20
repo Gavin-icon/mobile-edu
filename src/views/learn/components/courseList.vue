@@ -24,16 +24,12 @@
                 @load="onLoad">
         <van-cell v-for="item in list"
                   :key="item.id">
-          <!--课程左侧图片-->
-          <div><img :src="item.courseImgUrl" alt=""></div>
+          <!--所有课程与已购课程的图不一样：课程左侧图片-->
+          <div><img :src="item.image" alt=""></div>
           <!--课程右侧信息-->
           <div class="course-info">
-            <h3 v-text="item.courseName"></h3>
+            <h3 v-text="item.name"></h3>
             <p v-html="item.previewFirstField"></p>
-            <p>
-              <span class="course-discounts">￥{{ item.discounts }}</span>
-              <s class="course-price">￥{{ item.price }}</s>
-            </p>
           </div>
         </van-cell>
       </van-list>
@@ -69,37 +65,16 @@ export default {
   },
   methods: {
     async onLoad () {
-      // 判断是否经过了刷新，刷新了就让列表list为空【因为刷新后渲染的列表key与触底的更新数据的key重复会报错】
-      // 但是我们不应该每次触底都让list为空，否则就拿不到之前push进去的数据了，所以我们应该在第一次触底后把count归0，解决掉refresh状态，这样的话，既解决了报错又解决了重复数据问题!!!!
-      if (this.count !== 0) {
-        this.list = []
-        // console.log(this.count)
-      }
       try {
-        const { data } = await this.fetchData({
-          currentPage: this.currentPage,
-          pageSize: this.pageSize,
-          status: 1
-        })
-        console.log(data)
-        if (data.data && data.data.records && data.data.records.length !== 0) {
+        const { data } = await this.fetchData()
+        // console.log(data)
+        if (data.content && data.content.length !== 0) {
           // 因为每次触底后是往list数组添加内容，所以要添加的是数据，而不是数组
-          this.list.push(...data.data.records)
+          this.list = data.content
         }
-        // 下次请求下一页
-        this.currentPage++
         // 请求后loading状态为false,组件监控到false会再发请求
         this.loading = false
-        // 每次检测以下当前的records还有几条，小于pageSize就结束，让finished变为true || total和list.lengt一致时结束也可
-        // 将刷新状态的count归0,防止id重复，刷新后导致的
-        this.count = 0
-        if (data.data.records.length < this.pageSize) {
-          this.finished = true
-        }
-        //  由于课程列表的分页功能后台并未实现，故而直接就加载了14个列表，直接就触底了，会导致选课列表无法加载数据
-        // else if (data.content.length < this.pageSize + 5) {
-        //   this.finished = true
-        // }
+        this.finished = true
       } catch (error) {
         await setTimeout(() => {
           this.loading = false
@@ -110,22 +85,14 @@ export default {
     // 上拉刷新操作
     async onRefresh () {
       try {
-        // 不能使用inLoad,onLoad是触底操作，currentPage不是我们要的，我们要让currentPage=1
-        this.currentPage = 1
-        const { data } = await this.fetchData({
-          currentPage: this.currentPage,
-          pageSize: 10,
-          status: 1
-        })
+        const { data } = await this.fetchData()
         await setTimeout(() => {
           // 该组件会被复用，可能后台数据不一致，所以不要轻易赋值,只有一种情况下才可已赋值：data.data存在，data.data.records存在,data.data.records!==0才可以赋值，否则会报错
-          if (data.data && data.data.record && data.data.record.length !== 0) {
-            this.list = data.data.record
+          if (data.content && data.content.length !== 0) {
+            this.list = data.content
           }
           // 刷新成功后关闭下拉刷新状态
           this.isRefreshing = false
-          // 刷新成功,count++
-          this.count++
           // 提示设置
           this.$toast.success('刷新成功')
         }, 800)

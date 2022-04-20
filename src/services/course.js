@@ -17,3 +17,11 @@ export const getQueryCourse = data => {
     data
   })
 }
+
+// 获取已购课程接口
+export const purchaseCourse = () => {
+  return request({
+    method: 'GET',
+    url: '/front/course/getPurchaseCourse'
+  })
+}
